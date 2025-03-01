@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BDSM Orientation Test</title>
-  <script src="app.js"></script>
+  <!-- Import Open Sans from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
   <script src="https://unpkg.com/unlazy@0.11.3/dist/unlazy.with-hashing.iife.js" defer init></script>
   <script type="text/javascript">
@@ -19,7 +20,7 @@
             background: 'hsl(var(--background))',
             foreground: 'hsl(var(--foreground))',
             primary: {
-              DEFAULT: 'hsl(var(--primary))',
+              DEFAULT: '#B392F0', // Updated purple
               foreground: 'hsl(var(--primary-foreground))'
             },
             secondary: {
@@ -43,9 +44,12 @@
               foreground: 'hsl(var(--popover-foreground))'
             },
             card: {
-              DEFAULT: 'hsl(var(--card))',
+              DEFAULT: '#2B2B2B', // Updated charcoal black
               foreground: 'hsl(var(--card-foreground))'
             },
+          },
+          fontFamily: {
+            sans: ['Open Sans', 'sans-serif'], // Add Open Sans as the default sans font
           },
         }
       }
@@ -99,13 +103,15 @@
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-background text-foreground">
-  <div class="bg-card p-8 rounded-2xl shadow-xl w-[22rem] text-center">
-    <h1 class="text-3xl font-extrabold text-purple-500 mb-4">BDSM Orientation Test</h1>
-    <p class="text-muted-foreground mb-6">Read the statement and rate it accordingly.</p>
-    <button class="bg-primary text-primary-foreground py-3 px-6 rounded-lg text-lg w-full hover:bg-primary/80">
+<body class="flex items-center justify-center min-h-screen bg-[#2B2B2B] text-white font-sans">
+  <div class="bg-[#2B2B2B] p-8 rounded-2xl shadow-xl w-[22rem] text-center">
+    <h1 class="text-3xl font-extrabold text-[#B392F0] mb-4">Welcome to the BDSMtest.AI</h1>
+    <p class="text-gray-400 mb-6">Read the statement and rate it accordingly.</p>
+    <button class="bg-[#B392F0] text-white py-3 px-6 rounded-lg text-lg w-full hover:bg-[#B392F0]/80">
       Start Test
     </button>
   </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

@@ -155,22 +155,93 @@ document.addEventListener('DOMContentLoaded', () => {
             scores[category] = Math.round((scores[category] * 100) / 28);
         });
     
+        // Sort scores in descending order
+        const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    
+        // Get the top 3 categories
+        const topCategories = sortedScores
+            .slice(0, 3) // Take the top 3
+            .map(([category]) => category); // Extract the category names
+    
+        // Map categories to books
+        const categoryToBooks = {
+            "Submissive": [
+                "Subspace Dos and Donts",
+                "Submissive wants and needs",
+                "The New bottoming Book"
+            ],
+            "Switch": [
+                "The Naked Truth - Dr. Charley Ferrer",
+                "Techniques Of Pleasure - Margot Weiss"
+            ],
+            "Bondage": [
+                "Rope Bondage Choice and Care"
+            ],
+            "Exhibitionist": [], // No books provided for this category
+            "Vanilla": [
+                "Single in the scene",
+                "Guide to your first munch",
+                "Entering the BDSM community",
+                "Play Partner Checklist"
+            ],
+            "Dominant": [
+                "The New Topping Book",
+                "Female Domination - Elise Sutton",
+                "The Control Book"
+            ],
+            "Sadist": [
+                "Baumeister (1997)",
+                "Sadomasochism - Powerful Pleasures"
+            ],
+            "Degradation": [], // No books provided for this category
+            "Masochist": [
+                "Processing pain in play",
+                "Baumeister (1997)",
+                "Masochism as Escape from self (Baumeister 1988)"
+            ],
+            "Experimental": [
+                "Learn how to talk dirty",
+                "BDSM 50 Ways to Play"
+            ]
+        };
+    
+        // Generate reading recommendations
+        const recommendations = topCategories.map(category => {
+            const books = categoryToBooks[category];
+            if (books && books.length > 0) {
+                const randomBook = books[Math.floor(Math.random() * books.length)]; // Pick a random book
+                return { category, book: randomBook };
+            } else {
+                return { category, book: "No specific recommendation available." };
+            }
+        });
+    
         // Update the result display
         const resultsContainer = document.querySelector('#results');
         if (resultsContainer) {
             resultsContainer.innerHTML = `
                 <p class="text-center text-white text-lg">Your BDSM Orientation Results:</p>
                 <div class="space-y-4">
-                    ${Object.entries(scores)
+                    ${sortedScores
                         .map(([category, percent]) => 
-                            `<p class="text-white text-lg">${category}: <span class="text-purple-600">${percent}%</span></p>`)
+                            `<p class="text-white text-lg">${category}: <span class="text-[#B392F0]">${percent}%</span></p>`)
                         .join('')}
+                </div>
+                <div class="text-center mt-8">
+                    <h3 class="text-2xl font-semibold text-[#B392F0]">Reading Recommendations</h3>
+                    <p class="text-white text-sm mt-2">Here are books that we recommend you read based on your top 3 interests</p>
+                    <div class="space-y-4 mt-4">
+                        ${recommendations.map(({ category, book }) => 
+                            `<p class="text-white text-lg">${category}: <span class="text-[#B392F0]">${book}</span></p>`)
+                        .join('')}
+                    </div>
                 </div>
             `;
         }
     }
 
-    const startButton = document.querySelector('button.bg-primary');
+    // Corrected selector for the "Start Test" button
+    const startButton = document.querySelector('button.bg-\\[\\#B392F0\\]');
     if (startButton) {
         startButton.addEventListener('click', () => {
             window.location.href = 'questions.html';
