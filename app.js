@@ -2,12 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStep = 0;
     let answers = [];
 
-    if (window.location.pathname.includes('questions.html')) {
-        setupQuestionPage();
-    } else if (window.location.pathname.includes('results.html')) {
-        displayResults();
-    }
-
+    // Define the questions array at the top to avoid hoisting issues
     const questions = [
         // Submissive
         { text: "I don't like making decisions sexually; I just like to go with what my partner wants.", category: "Submissive" },
@@ -100,29 +95,57 @@ document.addEventListener('DOMContentLoaded', () => {
         { text: "Sexuality should be explored.", category: "Experimental" }
     ];
 
+    // Define totalQuestions
+    const totalQuestions = questions.length;
+
+    if (window.location.pathname.includes('questions.html')) {
+        setupQuestionPage();
+    } else if (window.location.pathname.includes('results.html')) {
+        displayResults();
+        setupRetakeButton(); // Add this line to set up the retake button
+    }
+
     function setupQuestionPage() {
-        const questionText = document.querySelector('h2');
+        const questionText = document.getElementById('questionText'); // Now works!
         const questionContainer = document.querySelector('.space-y-4');
-
-        if (!questionContainer || !questionText) return;
-
+        const progressBar = document.getElementById('progress');
+    
+        if (!questionContainer || !questionText || !progressBar) {
+            console.error("Elements not found in setupQuestionPage!");
+            return;
+        }
+    
         const buttons = questionContainer.querySelectorAll('button');
+    
+        function updateProgress() {
+            const progress = ((currentStep + 1) / totalQuestions) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+    
+        function loadNextQuestion() {
+            if (currentStep < totalQuestions) {
+                questionText.innerText = questions[currentStep].text;
+                updateProgress();
+            } else {
+                localStorage.setItem('userAnswers', JSON.stringify(answers));
+                window.location.href = 'results.html';
+            }
+        }
+    
         buttons.forEach((button, index) => {
             button.addEventListener('click', () => {
                 answers.push({
                     category: questions[currentStep].category,
                     score: index // 0 = Strongly Disagree, 4 = Fully Agree
                 });
-
-                if (currentStep < questions.length - 1) {
-                    currentStep++;
-                    questionText.innerText = questions[currentStep].text;
-                } else {
-                    localStorage.setItem('userAnswers', JSON.stringify(answers));
-                    window.location.href = 'results.html';
-                }
+    
+                currentStep++;
+                loadNextQuestion();
             });
         });
+    
+        // Load the first question
+        loadNextQuestion();
     }
 
     function displayResults() {
@@ -163,56 +186,56 @@ document.addEventListener('DOMContentLoaded', () => {
             .slice(0, 3) // Take the top 3
             .map(([category]) => category); // Extract the category names
     
-        // Map categories to books
+        // Map categories to books with links
         const categoryToBooks = {
             "Submissive": [
-                "Subspace Dos and Donts",
-                "Submissive wants and needs",
-                "The New bottoming Book"
+                { title: "Subspace Dos and Donts", link: "https://drive.google.com/file/d/15HxvzvJtMcNeigTFWoQ_rLxO0Y0Bvdbn/view?usp=drive_link" },
+                { title: "Submissive wants and needs", link: "https://drive.google.com/file/d/1fNe0qqbzZ5tneQ6sCOH_1G5GDCgXzc1W/view?usp=drive_link" },
+                { title: "The New bottoming Book", link: "https://drive.google.com/file/d/1Q3GxaCsB0OrWT49Xrs5vOrizhH_eXKDY/view?usp=drive_link" }
             ],
             "Switch": [
-                "The Naked Truth - Dr. Charley Ferrer",
-                "Techniques Of Pleasure - Margot Weiss"
+                { title: "The Naked Truth - Dr. Charley Ferrer", link: "https://drive.google.com/file/d/1g_bRbgwxv-J-Waw9E_vQLPRwBHCmbIYO/view?usp=drive_link" },
+                { title: "Techniques Of Pleasure - Margot Weiss", link: "https://drive.google.com/file/d/1937kUVvRfr_ZSnbRkldLuVWW31QrVGmq/view?usp=drive_link" }
             ],
             "Bondage": [
-                "Rope Bondage Choice and Care"
+                { title: "Rope Bondage Choice and Care", link: "https://drive.google.com/file/d/1IvjHNd1KTmlyeBIY4LW8-S20Q-oJRgBL/view?usp=drive_link" }
             ],
             "Exhibitionist": [], // No books provided for this category
             "Vanilla": [
-                "Single in the scene",
-                "Guide to your first munch",
-                "Entering the BDSM community",
-                "Play Partner Checklist"
+                { title: "Single in the scene", link: "https://drive.google.com/file/d/1teap0wicSArkQjH9VKg3m3N9FceLZyMm/view?usp=drive_link" },
+                { title: "Guide to your first munch", link: "https://drive.google.com/file/d/1GeUHaIoThW-VQaHbWRAI--M1GcOeUY2Z/view?usp=drive_link" },
+                { title: "Entering the BDSM community", link: "https://drive.google.com/file/d/1_aH0lRHlb3LD5yCWFYKalXwV2n9jnwnE/view?usp=drive_link" },
+                { title: "Play Partner Checklist", link: "https://drive.google.com/file/d/166Hp9DWL7ldfHyiRAFIKY_3otDrnVtQ5/view?usp=drive_link" }
             ],
             "Dominant": [
-                "The New Topping Book",
-                "Female Domination - Elise Sutton",
-                "The Control Book"
+                { title: "The New Topping Book", link: "https://drive.google.com/file/d/1CyqBKRMwdLCAZvggu8upQswc2KzXc4fh/view?usp=drive_link" },
+                { title: "Female Domination - Elise Sutton", link: "https://drive.google.com/file/d/1S7Vnnnjl2KETZZ3eH9PGxsRMbWXzdmeQ/view?usp=drive_link" },
+                { title: "The Control Book", link: "https://drive.google.com/file/d/1_MTD2IpLikhrSitQbljLF6nKweMXcTrv/view?usp=drive_link" }
             ],
             "Sadist": [
-                "Baumeister (1997)",
-                "Sadomasochism - Powerful Pleasures"
+                { title: "Baumeister (1997)", link: "https://drive.google.com/file/d/1-YPy74cVI3t3KOWk9ijiIQyTg8raWaXh/view?usp=drive_link" },
+                { title: "Sadomasochism - Powerful Pleasures", link: "https://drive.google.com/file/d/1LQ2rolX4NLmwtRN-Ly__IU4EkDRzmsCr/view?usp=drive_link" }
             ],
             "Degradation": [], // No books provided for this category
             "Masochist": [
-                "Processing pain in play",
-                "Baumeister (1997)",
-                "Masochism as Escape from self (Baumeister 1988)"
+                { title: "Processing pain in play", link: "https://drive.google.com/file/d/1fo_wM9Fxd_1zGvS6Na1AXuO2NNX5BvR8/view?usp=drive_link" },
+                { title: "Baumeister (1997)", link: "https://drive.google.com/file/d/1-YPy74cVI3t3KOWk9ijiIQyTg8raWaXh/view?usp=drive_link" },
+                { title: "Masochism as Escape from self (Baumeister 1988)", link: "https://drive.google.com/file/d/1MTVqY2oxWGOlFZ5WKgTNs8r5HLulegVX/view?usp=drive_link" }
             ],
             "Experimental": [
-                "Learn how to talk dirty",
-                "BDSM 50 Ways to Play"
+                { title: "Learn how to talk dirty", link: "https://drive.google.com/file/d/1YXkMAy2lZu7geqMJpxKGInDUaDBUjWIF/view?usp=drive_link" },
+                { title: "BDSM 50 Ways to Play", link: "https://drive.google.com/file/d/13UkZ-79S4zjy1er30UcjVWxcIUbVvMtv/view?usp=drive_link" }
             ]
         };
     
-        // Generate reading recommendations
+        // Generate reading recommendations for the top 3 categories
         const recommendations = topCategories.map(category => {
             const books = categoryToBooks[category];
             if (books && books.length > 0) {
                 const randomBook = books[Math.floor(Math.random() * books.length)]; // Pick a random book
                 return { category, book: randomBook };
             } else {
-                return { category, book: "No specific recommendation available." };
+                return { category, book: { title: "No specific recommendation available.", link: "#" } };
             }
         });
     
@@ -220,27 +243,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultsContainer = document.querySelector('#results');
         if (resultsContainer) {
             resultsContainer.innerHTML = `
-                <p class="text-center text-white text-lg">Your BDSM Orientation Results:</p>
+                <p class="text-center text-white text-2xl">Your BDSM Orientation Results:</p>
                 <div class="space-y-4">
                     ${sortedScores
                         .map(([category, percent]) => 
-                            `<p class="text-white text-lg">${category}: <span class="text-[#B392F0]">${percent}%</span></p>`)
+                            `<div class="flex justify-between items-center w-full max-w-xs mx-auto">
+                                <span class="text-white text-2xl text-left">${category}:</span>
+                                <span class="text-[#B392F0] text-2xl font-medium">${percent}%</span>
+                            </div>`)
                         .join('')}
                 </div>
-                <div class="text-center mt-8">
-                    <h3 class="text-2xl font-semibold text-[#B392F0]">Reading Recommendations</h3>
-                    <p class="text-white text-sm mt-2">Here are books that we recommend you read based on your top 3 interests</p>
+                
+                <div class="text-center mt-12 w-full">
+                    <h3 class="text-4xl font-semibold text-[#B392F0] mb-4">Reading Recommendations</h3>
+                    <p class="text-white text-2xl mt-2">Here are books that we recommend you read based on your top 3 interests</p>
                     <div class="space-y-4 mt-4">
                         ${recommendations.map(({ category, book }) => 
-                            `<p class="text-white text-lg">${category}: <span class="text-[#B392F0]">${book}</span></p>`)
+                            `<p class="text-white text-2xl">${category}: 
+                                <a href="${book.link}" target="_blank" class="text-[#B392F0] underline hover:no-underline">
+                                    ${book.title} 📖
+                                </a>
+                            </p>`)
                         .join('')}
                     </div>
                 </div>
             `;
         }
     }
-
-    // Corrected selector for the "Start Test" button
+    
+    function setupRetakeButton() {
+        const retakeButton = document.getElementById('retakeButton');
+        if (retakeButton) {
+            retakeButton.addEventListener('click', () => {
+                localStorage.removeItem('userAnswers'); // Clear previous answers
+                window.location.href = 'index.html'; // Redirect to the title screen
+            });
+        }
+    }
     const startButton = document.querySelector('button.bg-\\[\\#B392F0\\]');
     if (startButton) {
         startButton.addEventListener('click', () => {

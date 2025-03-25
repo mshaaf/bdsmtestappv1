@@ -10,12 +10,31 @@
             background-color: #2B2B2B; /* Updated charcoal black */
             font-family: 'Open Sans';
         }
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #3A3A3A;
+            height: 8px;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #B392F0;
+            width: 4%;
+            transition: width 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen">
+    
+    <div class="progress-container">
+        <div id="progress" class="progress-bar"></div>
+    </div>
 
-    <div class="bg-[#2B2B2B] p-8 rounded-xl shadow-lg w-96">
-        <h2 class="text-3xl font-semibold text-center text-[#B392F0] mb-8">
+    <div class="bg-[#2B2B2B] p-8 rounded-xl shadow-lg w-[28rem]">
+        <!-- Add id="questionText" to the h2 element -->
+        <h2 id="questionText" class="text-3xl font-semibold text-center text-[#B392F0] mb-8">
             I enjoy serving my partner and have a need to please them.
         </h2>
         

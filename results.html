@@ -15,22 +15,30 @@
 </head>
 <body class="flex items-center justify-center min-h-screen">
 
-    <div class="bg-[#2B2B2B] p-8 rounded-xl shadow-lg w-96 space-y-8">
-        <h2 class="text-3xl font-semibold text-center text-[#B392F0]">
+    <div class="bg-[#2B2B2B] p-8 rounded-xl shadow-lg w-55 space-y-8">
+        <h2 class="text-4xl font-semibold text-center text-[#B392F0]">
             Your BDSM Orientation Results
         </h2>
         
-        <p class="text-center text-white text-lg">
+        <p class="text-center text-white text-2xl">
             Discover your preferences and start your journey with personalized guidance.
         </p>
         
-        <p class="text-center text-white text-sm mb-8">
+        <p class="text-center text-white text-2xl mb-8">
             Below is a breakdown of your scores across 10 key areas of BDSM, along with recommended reading tailored to your interests.
         </p>
         
         <!-- Results Container (Updated ID) -->
         <div id="results" class="space-y-4">
             <!-- Results will be dynamically inserted here by JavaScript -->
+        </div>
+
+        <!-- Retake Button Section -->
+        <div class="text-center mt-8">
+            <p class="text-white text-2xl mb-4">Would you like to retake this test?</p>
+            <button id="retakeButton" class="bg-[#B392F0] text-white py-3 px-6 rounded-lg text-xl w-48 hover:bg-[#B392F0]/80">
+                Yes
+            </button>
         </div>
     </div>
 
